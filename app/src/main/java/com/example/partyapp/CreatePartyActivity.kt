@@ -98,4 +98,6 @@ class CreatePartyActivity : AppCompatActivity() {
         super.onBackPressed();
         this.finish();
     }
+
+    fun startVideo(view: View) {}
 }

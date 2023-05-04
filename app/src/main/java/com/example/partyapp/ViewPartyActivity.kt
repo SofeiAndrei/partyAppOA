@@ -3,9 +3,13 @@ package com.example.partyapp
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
+import android.util.Log
 import android.view.View
+import android.widget.MediaController
 import android.widget.TextView
 import android.widget.Toast
+import android.widget.VideoView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.partyapp.data.User
 import com.google.firebase.auth.FirebaseAuth
@@ -17,6 +21,8 @@ class ViewPartyActivity : AppCompatActivity() {
     var date_from_intent = ""
     var organizer_from_intent = ""
     private lateinit var auth : FirebaseAuth
+    private var ourRequestCode : Int = 1
+    private lateinit var videoView: VideoView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_party)
@@ -35,6 +41,27 @@ class ViewPartyActivity : AppCompatActivity() {
         address.setText(address_from_intent)
         date.setText(date_from_intent)
         organizer.setText(organizer_from_intent)
+
+         videoView = findViewById(R.id.videoView)
+        //setup media controller for play, pause
+        val mediaCollection = MediaController(this)
+        mediaCollection.setAnchorView(videoView)
+        videoView.setMediaController(mediaCollection)
+    }
+    fun startVideo(view: View){
+        val intent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
+            //resultLauncher.launch(intent)
+            startActivityForResult(intent,ourRequestCode)
+            view.setVisibility(View.VISIBLE);
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == ourRequestCode && resultCode == RESULT_OK){
+            val videoUri = data?.data
+            videoView.setVideoURI(videoUri)
+            videoView.start()
+        }
     }
     fun sendEmail(view: View){
         auth = FirebaseAuth.getInstance()
