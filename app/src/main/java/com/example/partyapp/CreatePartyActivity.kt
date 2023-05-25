@@ -1,5 +1,6 @@
 package com.example.partyapp
 
+import android.animation.ObjectAnimator
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Build
@@ -7,6 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.animation.LinearInterpolator
+import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -33,6 +37,26 @@ class CreatePartyActivity : AppCompatActivity() {
         setContentView(R.layout.activity_create_party)
 
         auth = FirebaseAuth.getInstance()
+
+        val partyHat = findViewById<ImageView>(R.id.partyHat)
+        val createButon = findViewById<Button>(R.id.createButton)
+
+        createButon.setOnClickListener{
+
+            val partyHatRotation = ObjectAnimator.ofFloat(partyHat,
+                View.ROTATION,
+                partyHat.rotation - 12f,
+                partyHat.rotation + 12f)
+
+            partyHatRotation.duration = 800
+            partyHatRotation.interpolator = LinearInterpolator ()
+            partyHatRotation.repeatCount = ObjectAnimator.INFINITE
+            partyHatRotation.repeatMode = ObjectAnimator.REVERSE
+            partyHatRotation.start()
+
+        }
+
+//
     }
 
     fun showDatePicker(view: View) {
@@ -58,38 +82,38 @@ class CreatePartyActivity : AppCompatActivity() {
     }
     fun submitParty(view : View) {
 
-        lateinit var newParty: Party
+//        lateinit var newParty: Party
+////
+////        partyTitle = findViewById<TextView>(R.id.nameInput).text.toString()
+////        partyAddress = findViewById<TextView>(R.id.addressInput).text.toString()
+////
+////        if(partyTitle == "") {
+////            Toast.makeText(this,"Enter party title", Toast.LENGTH_SHORT).show()
+////
+////        }
+////        else if(partyAddress == "") {
+////            Toast.makeText(this,"Enter party address", Toast.LENGTH_SHORT).show()
+////        }
+////        else if(this.date == "") {
+////            Toast.makeText(this,"Select date", Toast.LENGTH_SHORT).show()
+////        }
+////        else {
+////            val name = auth.currentUser?.displayName
+////            val currentUser = name?.let { User(it, name) }
+////            if (currentUser != null ) {
+////                newParty= Party(partyTitle, partyAddress, this.date, currentUser)
+////                val pr = PartyRepository()
+////                pr.createParty(newParty)
+////                Toast.makeText(this, "Party created successfully!", Toast.LENGTH_LONG).show()
+////                val intent = Intent(this, MainActivity::class.java)
+////                startActivity(intent)
+////                finish()
+////            }
+////            else {
+////                Toast.makeText(this, "An error occurred !", Toast.LENGTH_LONG).show()
+//
+//            }
 
-        partyTitle = findViewById<TextView>(R.id.nameInput).text.toString()
-        partyAddress = findViewById<TextView>(R.id.addressInput).text.toString()
-
-        if(partyTitle == "") {
-            Toast.makeText(this,"Enter party title", Toast.LENGTH_SHORT).show()
-
-        }
-        else if(partyAddress == "") {
-            Toast.makeText(this,"Enter party address", Toast.LENGTH_SHORT).show()
-        }
-        else if(this.date == "") {
-            Toast.makeText(this,"Select date", Toast.LENGTH_SHORT).show()
-        }
-        else {
-            val name = auth.currentUser?.displayName
-            val currentUser = name?.let { User(it, name) }
-            if (currentUser != null ) {
-                newParty= Party(partyTitle, partyAddress, this.date, currentUser)
-                val pr = PartyRepository()
-                pr.createParty(newParty)
-                Toast.makeText(this, "Party created successfully!", Toast.LENGTH_LONG).show()
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-                finish()
-            }
-            else {
-                Toast.makeText(this, "An error occurred !", Toast.LENGTH_LONG).show()
-
-            }
-        }
 
 
     }
